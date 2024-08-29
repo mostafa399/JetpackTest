@@ -1,4 +1,4 @@
-package com.mostafahelal.myapplication.ui.gym
+package com.mostafahelal.myapplication.gym.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -9,13 +9,13 @@ import androidx.room.Update
 @Dao
 interface GymsDao {
     @Query("select * from gyms ")
-    suspend fun getGyms():List<Gym>
+    suspend fun getGyms():List<LocalGym>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addGyms(gyms:List<Gym>)
-    @Update(entity = Gym::class)
-    suspend fun update(gymsFavouriteState:GymsFavouriteState)
-    @Update(entity = Gym::class)
+    suspend fun addGyms(gyms:List<LocalGym>)
+    @Update(entity = LocalGym::class)
+    suspend fun update(gymsFavouriteState: GymsFavouriteState)
+    @Update(entity = LocalGym::class)
     suspend fun updateAll(gymsFavouriteState:List<GymsFavouriteState>)
     @Query("select * from gyms where is_favourite = 1")
-    suspend fun getFavouriteGyms():List<Gym>
+    suspend fun getFavouriteGyms():List<LocalGym>
 }

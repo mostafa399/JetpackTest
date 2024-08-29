@@ -1,9 +1,11 @@
-package com.mostafahelal.myapplication.ui.gym
+package com.mostafahelal.myapplication.gym.presentation.details
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mostafahelal.myapplication.gym.data.remote.GymsApiServices
+import com.mostafahelal.myapplication.gym.domain.Gym
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,7 +38,15 @@ class GymsDetailsViewModel(
     }
     private suspend fun getGymFromRemoteDb(id:Int) =
         withContext(Dispatchers.IO) {
-            gymsApiServices.getGym(id).values.first()
+            gymsApiServices.getGym(id).values.first().let {
+                Gym(
+                    it.id,
+                    it.name,
+                    it.des,
+                    it.is_open,
+
+                )
+            }
         }
 
 

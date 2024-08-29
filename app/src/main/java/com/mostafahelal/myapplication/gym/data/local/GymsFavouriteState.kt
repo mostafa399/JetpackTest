@@ -1,4 +1,4 @@
-package com.mostafahelal.myapplication.ui.gym
+package com.mostafahelal.myapplication.gym.data.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

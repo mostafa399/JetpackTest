@@ -1,4 +1,4 @@
-package com.mostafahelal.myapplication
+package com.mostafahelal.myapplication.gym.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -31,15 +31,22 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.mostafahelal.myapplication.ui.gym.GymDetailsScreen
-import com.mostafahelal.myapplication.ui.gym.GymsScreen
+import com.mostafahelal.myapplication.R
+import com.mostafahelal.myapplication.gym.presentation.details.GymDetailsScreen
+import com.mostafahelal.myapplication.gym.presentation.gymsList.GymsScreen
+import com.mostafahelal.myapplication.gym.presentation.gymsList.GymsViewModel
+import dagger.hilt.InstallIn
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +61,17 @@ fun GymsAroundApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "gyms") {
         composable(route = "gyms") {
-            GymsScreen { id ->
-                navController.navigate("gyms/$id")
-            }
+           val vm:GymsViewModel= hiltViewModel()
+            GymsScreen(
+                state = vm.state.value,
+                onItemClick = { id ->
+                    navController.navigate("gyms/$id")
+                },
+                onFavouriteItemClick = {id,oldValue->
+                    vm.toggleFavouriteIcon(id,oldValue)
+                }
+
+            )
         }
         composable(
             route = "gyms/{gym_id}",
