@@ -1,10 +1,12 @@
 package com.mostafahelal.myapplication.gym.data
 
+import com.mostafahelal.myapplication.gym.data.di.IoDispatcher
 import com.mostafahelal.myapplication.gym.data.local.GymsDao
 import com.mostafahelal.myapplication.gym.data.local.GymsFavouriteState
 import com.mostafahelal.myapplication.gym.data.local.LocalGym
 import com.mostafahelal.myapplication.gym.data.remote.GymsApiServices
 import com.mostafahelal.myapplication.gym.domain.Gym
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -13,12 +15,13 @@ import javax.inject.Singleton
 @Singleton
 class GymsRepository @Inject constructor(
     private val apiServices: GymsApiServices,
-    private val gymsDao: GymsDao
+    private val gymsDao: GymsDao,
+    @IoDispatcher private val dispacher: CoroutineDispatcher
 
 ) {
 
     suspend fun loadGyms() =
-        withContext(Dispatchers.IO) {
+        withContext(dispacher) {
             try {
                 updateLocalDb()
             } catch (e: Exception) {
@@ -30,7 +33,7 @@ class GymsRepository @Inject constructor(
         }
 
     suspend fun getGyms(): List<Gym> {
-        return withContext(Dispatchers.IO) {
+        return withContext(dispacher) {
             return@withContext gymsDao.getGyms().map {
                 Gym(
                     it.id,
@@ -44,7 +47,7 @@ class GymsRepository @Inject constructor(
     }
 
     suspend fun toggleFavouriteGym(gymId: Int, state: Boolean) =
-        withContext(Dispatchers.IO) {
+        withContext(dispacher) {
             gymsDao.update(
                 GymsFavouriteState(id = gymId, isFavoutite = state)
             )

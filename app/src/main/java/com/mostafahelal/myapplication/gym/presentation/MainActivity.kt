@@ -43,6 +43,7 @@ import com.mostafahelal.myapplication.R
 import com.mostafahelal.myapplication.gym.presentation.details.GymDetailsScreen
 import com.mostafahelal.myapplication.gym.presentation.gymsList.GymsScreen
 import com.mostafahelal.myapplication.gym.presentation.gymsList.GymsViewModel
+import com.mostafahelal.myapplication.ui.theme.MyApplicationTheme
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,7 +52,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GymsAroundApp()
+            MyApplicationTheme {
+                GymsAroundApp()
+            }
+
         }
     }
 }

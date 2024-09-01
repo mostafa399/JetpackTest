@@ -27,9 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mostafahelal.myapplication.gym.domain.Gym
+import com.mostafahelal.myapplication.gym.presentation.SementicsDescription
 import com.mostafahelal.myapplication.ui.theme.Purple40
 
 
@@ -50,7 +53,11 @@ fun GymsScreen(
                 })
             }
         }
-        if (state.isLoading) CircularProgressIndicator()
+        if (state.isLoading) CircularProgressIndicator(
+            modifier = Modifier.semantics {
+                this.contentDescription=SementicsDescription.GYMS_LIST_LOADING
+            }
+        )
         state.error?.let { Text(text = it) }
 
 
